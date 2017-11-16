@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+	
+	<!-- 离线扫描-->
+	<bean id="CheckOnLineTask" class="com.kingdom.park.socket.service.task.CheckOnLineTask" >
+		<property name="sessionContext" ref="sessionContext"/>
+	</bean>
+	<!-- 同步预约订单 -->
+	<bean id="SyncAdvanceOrderTask" class="com.kingdom.park.socket.service.task.SyncAdvanceOrderTask">
+		<property name="sessionContext" ref="sessionContext"/>
+	</bean>
+	<!-- 同步车辆绑定-->
+	<bean id="SyncCarBindTask" class="com.kingdom.park.socket.service.task.SyncCarBindTask">
+		<property name="sessionContext" ref="sessionContext"/>
+	</bean>
+	<!-- 同步资产-->
+	<bean id="SyncMemberAssetTask" class="com.kingdom.park.socket.service.task.SyncMemberAssetTask">
+		<property name="sessionContext" ref="sessionContext"/>
+	</bean>
+	<!-- 同步自助缴费-->
+	<bean id="SyncSelfPayTask" class="com.kingdom.park.socket.service.task.SyncSelfPayTask">
+		<property name="sessionContext" ref="sessionContext"/>
+	</bean>
+	<!-- 同步月卡-->
+	<bean id="SyncMemberCardTask" class="com.kingdom.park.socket.service.task.SyncMemberCardTask">
+		<property name="sessionContext" ref="sessionContext"/>
+	</bean>
+	
+	<!-- 定时清空停车费用仓库-->
+	<bean id="CountFeeTask" class="com.kingdom.park.socket.service.queue.CountFeeStorage"></bean>
+	
+	<!-- **************************************************************************************************** -->
+	
+	<!-- 离线扫描 -->
+	<bean id="CheckOnLineTaskJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="CheckOnLineTask" />
+		<property name="targetMethod" value="run" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- 同步预约订单 -->
+	<bean id="SyncAdvanceOrderTaskJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="SyncAdvanceOrderTask" />
+		<property name="targetMethod" value="run" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- 同步车辆绑定 -->
+	<bean id="SyncCarBindTaskJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="SyncCarBindTask" />
+		<property name="targetMethod" value="run" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- 同步资产-->
+	<bean id="SyncMemberAssetTaskJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="SyncMemberAssetTask" />
+		<property name="targetMethod" value="run" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- 同步自助缴费-->
+	<bean id="SyncSelfPayTaskJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="SyncSelfPayTask" />
+		<property name="targetMethod" value="run" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 	同步月卡 -->
+	<bean id="SyncMemberCardTaskJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="SyncMemberCardTask" />
+		<property name="targetMethod" value="run" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 定时清空停车费用仓库 -->
+	<bean id="CountFeeTaskJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="CountFeeTask" />
+		<property name="targetMethod" value="clean" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- **************************************************************************************************** -->
+	<!-- 离线扫描 -->
+	<bean id="CheckOnLineTaskTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<!-- see the example of method invoking job above -->
+		<property name="jobDetail" ref="CheckOnLineTaskJobDetail" />
+		<!-- 10 seconds -->
+		<property name="startDelay" value="10000" />
+		<!-- repeat every 30 seconds -->
+		<property name="repeatInterval" value="30000" />
+	</bean>
+	
+	<!-- 同步预约订单-->
+	<bean id="SyncAdvanceOrderTaskTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<!-- see the example of method invoking job above -->
+		<property name="jobDetail" ref="SyncAdvanceOrderTaskJobDetail" />
+		<!-- 10 seconds -->
+		<property name="startDelay" value="10000" />
+		<!-- repeat every 30 seconds -->
+		<property name="repeatInterval" value="30000" />
+	</bean>
+	
+	<!-- 同步车辆绑定 -->
+	<bean id="SyncCarBindTaskTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<!-- see the example of method invoking job above -->
+		<property name="jobDetail" ref="SyncCarBindTaskJobDetail" />
+		<!-- 10 seconds -->
+		<property name="startDelay" value="10000" />
+		<!-- repeat every 30 seconds -->
+		<property name="repeatInterval" value="30000" />
+	</bean>
+	
+	<!-- 同步资产 -->
+	<bean id="SyncMemberAssetTaskTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<!-- see the example of method invoking job above -->
+		<property name="jobDetail" ref="SyncMemberAssetTaskJobDetail" />
+		<!-- 10 seconds -->
+		<property name="startDelay" value="10000" />
+		<!-- repeat every 30 seconds -->
+		<property name="repeatInterval" value="30000" />
+	</bean>
+	
+	<!-- 同步自助缴费 -->
+	<bean id="SyncSelfPayTaskTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<!-- see the example of method invoking job above -->
+		<property name="jobDetail" ref="SyncSelfPayTaskJobDetail" />
+		<!-- 10 seconds -->
+		<property name="startDelay" value="10000" />
+		<!-- repeat every 30 seconds -->
+		<property name="repeatInterval" value="30000" />
+	</bean>
+	
+	<!-- 同步月卡变更 -->
+	<bean id="SyncMemberCardTaskTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<!-- see the example of method invoking job above -->
+		<property name="jobDetail" ref="SyncMemberCardTaskJobDetail" />
+		<!-- 10 seconds -->
+		<property name="startDelay" value="10000" />
+		<!-- repeat every 30 seconds -->
+		<property name="repeatInterval" value="30000" />
+	</bean>
+	
+	<!-- 定时清空停车费用仓库 -->
+	<bean id="CountFeeTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<!-- see the example of method invoking job above -->
+		<property name="jobDetail" ref="CountFeeTaskJobDetail" />
+		<!-- 10 seconds -->
+		<property name="startDelay" value="10000" />
+		<!-- repeat every  day 0 点-->
+		<property name="cronExpression" value="0 0 0 * * ?" />
+	</bean>
+	<!-- **************************************************************************************************** -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="CheckOnLineTaskTrigger"/>
+				<ref bean="SyncAdvanceOrderTaskTrigger"/>
+				<ref bean="SyncCarBindTaskTrigger"/>
+				<ref bean="SyncMemberAssetTaskTrigger"/>
+				<ref bean="SyncSelfPayTaskTrigger"/>
+				<ref bean="SyncMemberCardTaskTrigger"/>
+				<ref bean="CountFeeTaskTrigger"/>
+			</list>
+		</property>
+	</bean>
+	
+</beans>

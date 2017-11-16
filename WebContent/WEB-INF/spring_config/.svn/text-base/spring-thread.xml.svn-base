@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+	
+	<!-- 仓库类 -->
+	<bean id="syncAdvanceOrderStorage" class="com.kingdom.park.socket.service.queue.SyncAdvanceOrderStorage" />
+	<bean id="syncCarBindStorage" class="com.kingdom.park.socket.service.queue.SyncCarBindStorage" />
+	<bean id="syncMemberAssetStorage" class="com.kingdom.park.socket.service.queue.SyncMemberAssetStorage" />
+	<bean id="syncSelfPayStorage" class="com.kingdom.park.socket.service.queue.SyncSelfPayStorage" />
+	<bean id="syncMemberCardStorage" class="com.kingdom.park.socket.service.queue.SyncMemberCardStorage" />
+	
+	
+	<!-- 队列进程 -->
+	<bean id="syncAdvanceOrderQueue" class="com.kingdom.park.socket.service.queue.SyncAdvanceOrderQueue">
+			<property name="storage" ref="syncAdvanceOrderStorage"/>
+	</bean>
+	<bean id="syncCarBindQueue" class="com.kingdom.park.socket.service.queue.SyncCarBindQueue" >
+		<property name="storage" ref="syncCarBindStorage"/>
+	</bean>
+	<bean id="syncMemberAssetQueue" class="com.kingdom.park.socket.service.queue.SyncMemberAssetQueue" >
+		<property name="storage" ref="syncMemberAssetStorage"/>
+	</bean>
+	<bean id="syncSelfPayQueue" class="com.kingdom.park.socket.service.queue.SyncSelfPayQueue" >
+		<property name="storage" ref="syncSelfPayStorage"/>
+	</bean>
+	<bean id="syncMemberCardQueue" class="com.kingdom.park.socket.service.queue.SyncMemberCardQueue" >
+		<property name="storage" ref="syncMemberCardStorage"/>
+	</bean>
+	
+	<!-- 启动进程 -->
+	<bean id="jobMap" class="org.springframework.beans.factory.config.MapFactoryBean">
+		<property name="sourceMap">
+			<map>
+				<entry key="syncAdvanceOrderQueue" value-ref="syncAdvanceOrderQueue"/>
+				<entry key="syncCarBindQueue" value-ref="syncCarBindQueue"/>
+				<entry key="syncMemberAssetQueue" value-ref="syncMemberAssetQueue"/>
+				<entry key="syncSelfPayQueue" value-ref="syncSelfPayQueue"/>
+				<entry key="syncMemberCardQueue" value-ref="syncMemberCardQueue"/>
+			</map>
+		</property>
+	</bean>
+	
+
+	
+</beans>

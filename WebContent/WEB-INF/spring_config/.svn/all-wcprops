@@ -1,0 +1,19 @@
+END
+spring-mina.xml
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/ZHCS/KDSP/!svn/ver/12617/branches/projects/KDSP_XA/src/third/ThirdParkServer/WebContent/WEB-INF/spring_config/spring-mina.xml
+END
+spring-quartz.xml
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/ZHCS/KDSP/!svn/ver/12617/branches/projects/KDSP_XA/src/third/ThirdParkServer/WebContent/WEB-INF/spring_config/spring-quartz.xml
+END
+spring-thread.xml
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/ZHCS/KDSP/!svn/ver/12617/branches/projects/KDSP_XA/src/third/ThirdParkServer/WebContent/WEB-INF/spring_config/spring-thread.xml
+END

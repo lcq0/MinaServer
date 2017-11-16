@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+		
+	<!--<bean id="springBeanFactoryUtils" class="com.kingdom.digitalcity.esb.common.utils.SpringBeanFactoryUtils"></bean>-->
+	<!-- 工程配置文件 -->
+	<context:property-placeholder location="classpath:server.properties" />
+	
+	<!-- ******************************mina的配置文件************************************ -->
+	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+		<property name="customEditors">
+			<map>
+				<entry key="java.net.SocketAddress">
+					<bean class="org.apache.mina.integration.beans.InetSocketAddressEditor" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<!-- 处理消息的Commands -->
+	<!-- 鉴权 -->
+	<bean id="C_Check_License_Command" class="com.kingdom.park.socket.service.command.C_Check_License_Command">
+	</bean>
+	<!-- 心跳/回复 -->
+	<bean id="C_0x11_0x12_Command" class="com.kingdom.park.socket.service.command.C_0x11_0x12_Command">
+	</bean>
+	<!-- 车辆进场/回复 -->
+	<bean id="C_0x21_0x22_Command" class="com.kingdom.park.socket.service.command.C_0x21_0x22_Command">
+	</bean>
+	<!-- 车辆出场/回复 -->
+	<bean id="C_0x23_0x24_Command" class="com.kingdom.park.socket.service.command.C_0x23_0x24_Command">
+	</bean>
+	<!-- 提交日报表/回复 -->
+	<bean id="C_0x25_0x26_Command" class="com.kingdom.park.socket.service.command.C_0x25_0x26_Command">
+	</bean>
+	<!-- 查询车辆资产/回复 -->
+	<bean id="C_0x27_0x28_Command" class="com.kingdom.park.socket.service.command.C_0x27_0x28_Command">
+	</bean>
+	<!-- 上传并支付订单/回复 -->
+	<bean id="C_0x29_0x30_Command" class="com.kingdom.park.socket.service.command.C_0x29_0x30_Command">
+	</bean>
+	<!-- 更新入场图片路径/回复 -->
+	<bean id="C_0x31_0x32_Command" class="com.kingdom.park.socket.service.command.C_0x31_0x32_Command">
+	</bean>
+	<!-- 查询车辆月卡/回复 -->
+	<bean id="C_0x33_0x34_Command" class="com.kingdom.park.socket.service.command.C_0x33_0x34_Command">
+	</bean>
+	<!-- 查询停车场月卡/回复 -->
+	<bean id="C_0x35_0x36_Command" class="com.kingdom.park.socket.service.command.C_0x35_0x36_Command">
+	</bean>
+	<!--同步会员资产回复 -->
+	<bean id="C_0x52_Command" class="com.kingdom.park.socket.service.command.C_0x52_Command">
+	</bean>
+	<!--同步车牌绑定回复-->
+	<bean id="C_0x54_Command" class="com.kingdom.park.socket.service.command.C_0x54_Command">
+	</bean>
+	<!--同步自助缴费回复-->
+	<bean id="C_0x56_Command" class="com.kingdom.park.socket.service.command.C_0x56_Command">
+	</bean>
+	<!--同步预约订单回复-->
+	<bean id="C_0x58_Command" class="com.kingdom.park.socket.service.command.C_0x58_Command">
+	</bean>
+	<!-- 计算停车费用/回复 -->
+	<bean id="C_0x59_0x60_Command" class="com.kingdom.park.socket.service.command.C_0x59_0x60_Command">
+	</bean>
+	<!--同步月卡变更回复-->
+	<bean id="C_0x62_Command" class="com.kingdom.park.socket.service.command.C_0x62_Command">
+	</bean>
+	
+	
+	<!-- 处理消息的Commands -->
+	<!-- Session的监听 -->
+	<bean id="parkHandlerListener" class="com.kingdom.park.socket.service.handler.HandlerListenerAdapter" >
+	</bean>
+
+	<!-- Session容器 -->
+	<bean id="sessionContext" class="com.kingdom.park.socket.service.session.SessionContext" />
+	
+	<!-- The IoHandler implementation -->
+	<bean id="parkcommHandler" class="com.kingdom.park.socket.service.handler.ParkSocketHandler">
+		<property name="commands">
+			<list>
+				<ref bean="C_Check_License_Command"/>
+ 				<ref bean="C_0x11_0x12_Command" />
+ 				<ref bean="C_0x21_0x22_Command" />
+ 				<ref bean="C_0x23_0x24_Command" />
+ 				<ref bean="C_0x25_0x26_Command" />
+ 				<ref bean="C_0x27_0x28_Command" />
+ 				<ref bean="C_0x29_0x30_Command" />
+ 				<ref bean="C_0x31_0x32_Command" />
+ 				<ref bean="C_0x33_0x34_Command" />
+ 				<ref bean="C_0x35_0x36_Command" />
+ 				<ref bean="C_0x52_Command" />
+ 				<ref bean="C_0x54_Command" />
+ 				<ref bean="C_0x56_Command" />
+ 				<ref bean="C_0x58_Command" />
+ 				<ref bean="C_0x59_0x60_Command"/>
+ 				<ref bean="C_0x62_Command"/>
+			</list>
+		</property>
+		<property name="handlerListeners">
+			<list>
+				<ref bean="parkHandlerListener" />
+			</list>
+		</property>
+		<property name="sessionContext" ref="sessionContext"/>
+		
+	</bean>
+
+	<!-- the IoFilters -->
+
+	<bean id="parkexecutorFilter" class="org.apache.mina.filter.executor.ExecutorFilter" />
+
+	<bean id="parkmdcInjectionFilter" class="org.apache.mina.filter.logging.MdcInjectionFilter">
+		<constructor-arg value="remoteAddress" />
+	</bean>
+
+	<bean id="parkcodecFilter" class="org.apache.mina.filter.codec.ProtocolCodecFilter">
+		<constructor-arg>
+			<bean class="com.kingdom.park.socket.service.codec.ServiceMessageCodecFactory">		
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<bean id="parkloggingFilter" class="org.apache.mina.filter.logging.LoggingFilter" />
+
+	<!-- The non-SSL filter chain. -->
+	<bean id="parkfilterChainBuilder"
+		class="org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder">
+		<property name="filters">
+			<map>
+				<entry key="executor" value-ref="parkexecutorFilter" />
+				<entry key="mdcInjectionFilter" value-ref="parkmdcInjectionFilter" />
+				<entry key="codecFilter" value-ref="parkcodecFilter" />
+				<!-- <entry key="loggingFilter" value-ref="parkloggingFilter" /> -->
+			</map>
+		</property>
+	</bean>
+
+	<!-- The IoAcceptor which binds to port 9697 -->
+	<bean id="parkioAcceptor" class="org.apache.mina.transport.socket.nio.NioSocketAcceptor"
+		init-method="bind" destroy-method="unbind">
+		<property name="defaultLocalAddress" value=":9697" />
+		<property name="handler" ref="parkcommHandler" />
+		<property name="reuseAddress" value="true" />
+		<property name="filterChainBuilder" ref="parkfilterChainBuilder" />
+	</bean>
+
+	<!-- JMX stuff. Creates an MBeanServer. -->
+	<bean id="parkmbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
+		<property name="locateExistingServerIfPossible" value="true" />
+	</bean>
+	
+</beans>
